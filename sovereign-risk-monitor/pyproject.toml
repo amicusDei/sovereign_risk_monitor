@@ -1,0 +1,65 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sovereign-risk-monitor"
+version = "1.0.0"
+description = "Real-time sovereign bond risk scoring and early warning system"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.10"
+authors = [
+    {name = "Your Name", email = "your.email@example.com"}
+]
+keywords = ["sovereign", "bonds", "risk", "finance", "eikon"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Financial and Insurance Industry",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Office/Business :: Financial :: Investment",
+]
+
+dependencies = [
+    "pandas>=2.0.0",
+    "numpy>=1.24.0",
+    "pyyaml>=6.0",
+    "eikon>=1.1.0",
+    "wbgapi>=1.0.0",
+    "weo>=0.1.0",
+    "python-dotenv>=1.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "black>=23.0.0",
+    "mypy>=1.0.0",
+    "ruff>=0.1.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/yourusername/sovereign-risk-monitor"
+Repository = "https://github.com/yourusername/sovereign-risk-monitor"
+Issues = "https://github.com/yourusername/sovereign-risk-monitor/issues"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*", "config*"]
+
+[tool.black]
+line-length = 100
+target-version = ["py310", "py311", "py312"]
+
+[tool.ruff]
+line-length = 100
+select = ["E", "F", "I"]
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true

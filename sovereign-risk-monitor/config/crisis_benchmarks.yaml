@@ -1,0 +1,164 @@
+# Historical Crisis Benchmarks
+# Reference periods for contextualizing current market conditions
+
+crisis_periods:
+  global_financial_crisis:
+    name: Global Financial Crisis
+    start: 2008-09-15    # Lehman collapse
+    end: 2009-03-31
+    peak: 2008-10-15     # Peak stress
+    affected_countries: [US, GB, DE, FR]
+    characteristics:
+      - Banking sector collapse
+      - Credit freeze
+      - Flight to quality (Bunds/Treasuries)
+    peak_levels:
+      US:
+        yield_10y: 3.95
+        cds_5y: null      # US CDS not liquid
+        spread_vs_de: 180
+      GB:
+        yield_10y: 4.50
+        cds_5y: 165
+        spread_vs_de: 235
+      DE:
+        yield_10y: 3.20
+        cds_5y: 45
+        spread_vs_de: 0
+
+  eurozone_debt_crisis:
+    name: Eurozone Sovereign Debt Crisis
+    start: 2010-04-01    # Greek bailout request
+    end: 2012-09-30      # Draghi "whatever it takes"
+    peak: 2012-07-24     # Peak periphery spreads
+    affected_countries: [GR, IT, ES, PT, IE]
+    characteristics:
+      - Sovereign default risk
+      - Redenomination risk
+      - ECB intervention
+    peak_levels:
+      GR:
+        yield_10y: 35.0   # Pre-restructuring
+        cds_5y: 25000     # Implied default
+        spread_vs_de: 3350
+      IT:
+        yield_10y: 7.26
+        cds_5y: 590
+        spread_vs_de: 550
+      ES:
+        yield_10y: 7.62
+        cds_5y: 640
+        spread_vs_de: 590
+      PT:
+        yield_10y: 16.0
+        cds_5y: 1520
+        spread_vs_de: 1450
+      IE:
+        yield_10y: 14.0
+        cds_5y: 1200
+        spread_vs_de: 1250
+
+  covid_crash:
+    name: COVID-19 Market Crash
+    start: 2020-02-20
+    end: 2020-04-30
+    peak: 2020-03-18     # Peak volatility
+    affected_countries: [US, GB, IT, ES, FR, DE]
+    characteristics:
+      - Liquidity crisis
+      - Global risk-off
+      - Central bank intervention
+    peak_levels:
+      US:
+        yield_10y: 1.18   # Flight to quality drove yields down
+        cds_5y: null
+        spread_vs_de: 150
+      IT:
+        yield_10y: 2.42
+        cds_5y: 270
+        spread_vs_de: 280
+      ES:
+        yield_10y: 1.22
+        cds_5y: 150
+        spread_vs_de: 160
+      GB:
+        yield_10y: 0.75
+        cds_5y: 45
+        spread_vs_de: 110
+
+  uk_gilt_crisis:
+    name: UK Gilt Crisis (LDI)
+    start: 2022-09-23    # Mini-budget
+    end: 2022-10-31      # BoE intervention complete
+    peak: 2022-09-28     # Peak gilt stress
+    affected_countries: [GB]
+    characteristics:
+      - Fiscal credibility shock
+      - LDI pension fund margin calls
+      - BoE emergency intervention
+    peak_levels:
+      GB:
+        yield_10y: 4.50
+        cds_5y: 55
+        spread_vs_de: 250
+        yield_30y: 5.10   # LDI focus was long end
+        daily_move_bps: 100  # Unprecedented volatility
+
+# Stress thresholds derived from crisis periods
+# Used for grading current levels
+
+stress_thresholds:
+  yield_spread_bps:
+    # vs German Bund for EUR, vs US Treasury for others
+    normal: [0, 50]
+    elevated: [50, 150]
+    stressed: [150, 300]
+    crisis: [300, 500]
+    extreme: [500, null]  # null = no upper bound
+
+  cds_spread_bps:
+    safe: [0, 50]
+    normal: [50, 100]
+    elevated: [100, 200]
+    stressed: [200, 400]
+    crisis: [400, 800]
+    extreme: [800, null]
+
+  yield_volatility_30d:
+    # Annualized basis point volatility
+    low: [0, 30]
+    normal: [30, 60]
+    elevated: [60, 100]
+    high: [100, 150]
+    extreme: [150, null]
+
+  debt_to_gdp:
+    low: [0, 40]
+    moderate: [40, 60]
+    elevated: [60, 90]
+    high: [90, 120]
+    critical: [120, null]
+
+# Grading scale
+grading:
+  scale:
+    AAA: [0, 10]      # Minimal risk
+    AA: [10, 20]      # Very low risk
+    A: [20, 35]       # Low risk
+    BBB: [35, 50]     # Moderate risk
+    BB: [50, 65]      # Elevated risk
+    B: [65, 80]       # High risk
+    CCC: [80, 90]     # Very high risk
+    CC: [90, 95]      # Extreme risk
+    C: [95, 100]      # Near default
+
+  descriptions:
+    AAA: "Prime - Minimal credit risk"
+    AA: "High grade - Very low credit risk"
+    A: "Upper medium - Low credit risk"
+    BBB: "Lower medium - Moderate credit risk"
+    BB: "Speculative - Elevated credit risk"
+    B: "Highly speculative - High credit risk"
+    CCC: "Substantial risk - Very high credit risk"
+    CC: "Extremely speculative - Imminent default risk"
+    C: "In default or default imminent"

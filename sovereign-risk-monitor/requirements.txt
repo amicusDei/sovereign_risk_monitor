@@ -1,0 +1,17 @@
+# Core dependencies
+pandas>=2.0.0
+numpy>=1.24.0
+pyyaml>=6.0
+
+# Data APIs
+eikon>=1.1.0
+wbgapi>=1.0.0
+weo>=0.1.0
+
+# Environment management
+python-dotenv>=1.0.0
+
+# Optional: for development
+# pytest>=7.0.0
+# black>=23.0.0
+# mypy>=1.0.0

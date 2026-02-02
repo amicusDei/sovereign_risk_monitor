@@ -1,0 +1,215 @@
+# Sovereign Risk Monitor - Scoring Methodology
+# Based on IMF DSA framework, rating agency approaches (Moody's, S&P, Fitch)
+
+# =============================================================================
+# MARKET INDICATORS (Real-time, high frequency)
+# =============================================================================
+market_indicators:
+  cds_spread:
+    weight: 0.40
+    description: 5Y sovereign CDS spread (bps)
+    higher_is_riskier: true
+    source: LSEG Eikon
+    rationale: Direct market-implied default probability
+
+  yield_spread:
+    weight: 0.30
+    description: 10Y yield spread vs benchmark (bps)
+    higher_is_riskier: true
+    source: LSEG Eikon
+    rationale: Relative credit risk premium
+
+  yield_volatility:
+    weight: 0.30
+    description: 30-day realized yield volatility
+    higher_is_riskier: true
+    source: Calculated from Eikon timeseries
+    rationale: Market uncertainty indicator
+
+# =============================================================================
+# FISCAL INDICATORS (Annual, from IMF WEO)
+# =============================================================================
+fiscal_indicators:
+  debt_to_gdp:
+    weight: 0.35
+    description: General government gross debt (% GDP)
+    higher_is_riskier: true
+    source: IMF WEO (GGXWDG_NGDP)
+    thresholds:
+      low: 40
+      medium: 60
+      high: 90
+      critical: 120
+    rationale: Primary debt sustainability metric (Maastricht criterion 60%)
+
+  budget_deficit:
+    weight: 0.25
+    description: General government net lending/borrowing (% GDP)
+    higher_is_riskier: true  # Deficit is negative
+    source: IMF WEO (GGXCNL_NGDP)
+    thresholds:
+      low: 0
+      medium: -3
+      high: -6
+      critical: -10
+    rationale: Flow measure of fiscal position (Maastricht criterion -3%)
+
+  primary_balance:
+    weight: 0.20
+    description: Primary balance (% GDP)
+    higher_is_riskier: true  # Deficit is negative
+    source: IMF WEO (GGXONLB_NGDP)
+    rationale: Fiscal effort excluding interest payments
+
+  interest_to_revenue:
+    weight: 0.20
+    description: Interest payments (% government revenue)
+    higher_is_riskier: true
+    source: Calculated (IMF WEO)
+    thresholds:
+      low: 5
+      medium: 10
+      high: 15
+      critical: 25
+    rationale: Debt servicing burden
+
+# =============================================================================
+# EXTERNAL VULNERABILITY (Annual, from World Bank WDI)
+# =============================================================================
+external_indicators:
+  current_account:
+    weight: 0.25
+    description: Current account balance (% GDP)
+    higher_is_riskier: true  # Deficit is negative
+    source: World Bank (BN.CAB.XOKA.GD.ZS)
+    thresholds:
+      low: 2
+      medium: -2
+      high: -5
+      critical: -10
+    rationale: External financing need
+
+  external_debt:
+    weight: 0.25
+    description: External debt stocks (% GNI)
+    higher_is_riskier: true
+    source: World Bank (DT.DOD.DECT.GD.ZS)
+    thresholds:
+      low: 30
+      medium: 50
+      high: 80
+      critical: 150
+    rationale: Exposure to external creditors
+
+  reserves_coverage:
+    weight: 0.25
+    description: Foreign reserves (months of imports)
+    higher_is_riskier: false  # More reserves = safer
+    source: World Bank (FI.RES.TOTL.MO)
+    thresholds:
+      critical: 2
+      high: 3
+      medium: 5
+      low: 8
+    rationale: IMF recommends minimum 3 months coverage
+
+  reserves_to_debt:
+    weight: 0.25
+    description: Reserves to external debt (%)
+    higher_is_riskier: false  # Higher ratio = safer
+    source: World Bank (FI.RES.TOTL.DT.ZS)
+    thresholds:
+      critical: 20
+      high: 40
+      medium: 60
+      low: 100
+    rationale: Greenspan-Guidotti rule suggests 100% coverage
+
+# =============================================================================
+# GOVERNANCE / POLITICAL RISK (Annual, from World Governance Indicators)
+# =============================================================================
+governance_indicators:
+  political_stability:
+    weight: 0.25
+    description: Political stability and absence of violence
+    higher_is_riskier: false  # Higher score = more stable
+    source: World Bank WGI (PV.EST)
+    scale: "-2.5 to +2.5"
+    rationale: Risk of government destabilization
+
+  government_effectiveness:
+    weight: 0.20
+    description: Quality of public services and policy implementation
+    higher_is_riskier: false
+    source: World Bank WGI (GE.EST)
+    scale: "-2.5 to +2.5"
+    rationale: Capacity to implement fiscal policy
+
+  regulatory_quality:
+    weight: 0.15
+    description: Quality of regulations supporting private sector
+    higher_is_riskier: false
+    source: World Bank WGI (RQ.EST)
+    scale: "-2.5 to +2.5"
+    rationale: Business environment quality
+
+  rule_of_law:
+    weight: 0.20
+    description: Contract enforcement, property rights, courts
+    higher_is_riskier: false
+    source: World Bank WGI (RL.EST)
+    scale: "-2.5 to +2.5"
+    rationale: Legal predictability for investors
+
+  corruption_control:
+    weight: 0.20
+    description: Control of corruption in public sector
+    higher_is_riskier: false
+    source: World Bank WGI (CC.EST)
+    scale: "-2.5 to +2.5"
+    rationale: Governance quality indicator
+
+# =============================================================================
+# CATEGORY AGGREGATION
+# =============================================================================
+category_weights:
+  market: 0.35        # Real-time market signals
+  fiscal: 0.30        # Debt sustainability
+  external: 0.20      # External vulnerability
+  governance: 0.15    # Institutional quality
+
+# =============================================================================
+# NORMALIZATION & SCORING
+# =============================================================================
+normalization:
+  method: percentile_rank    # Cross-sectional percentile ranking
+  historical_window: 252     # Trading days for volatility calc
+  min_data_points: 20        # Minimum observations required
+
+scoring:
+  scale:
+    min: 0
+    max: 100
+  risk_categories:
+    very_low: [0, 20]
+    low: [20, 40]
+    moderate: [40, 60]
+    high: [60, 80]
+    very_high: [80, 100]
+
+# =============================================================================
+# DATA UPDATE FREQUENCY
+# =============================================================================
+update_frequency:
+  market: realtime           # Intraday from Eikon
+  fiscal: annual             # IMF WEO (April/October)
+  external: annual           # World Bank (yearly update)
+  governance: annual         # WGI (yearly update)
+
+# =============================================================================
+# REFERENCES
+# =============================================================================
+# IMF (2013) "Staff Guidance Note for Public Debt Sustainability Analysis"
+# Moody's (2019) "Sovereign Bond Ratings Methodology"
+# S&P (2017) "Sovereign Rating Methodology"
+# World Bank "Worldwide Governance Indicators Methodology"

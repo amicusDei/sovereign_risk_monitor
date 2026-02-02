@@ -1,0 +1,144 @@
+# Sovereign Risk Monitor - Country Configuration
+# RICs for 10Y Government Bond Yields and 5Y CDS Spreads
+
+countries:
+  # Eurozone Core
+  DE:
+    name: Germany
+    region: eurozone
+    yield_ric: DE10YT=RR
+    cds_ric: DEGV5YUSAC=R
+    currency: EUR
+    benchmark: true
+
+  FR:
+    name: France
+    region: eurozone
+    yield_ric: FR10YT=RR
+    cds_ric: FRGV5YUSAC=R
+    currency: EUR
+
+  NL:
+    name: Netherlands
+    region: eurozone
+    yield_ric: NL10YT=RR
+    cds_ric: null
+    currency: EUR
+
+  BE:
+    name: Belgium
+    region: eurozone
+    yield_ric: BE10YT=RR
+    cds_ric: null
+    currency: EUR
+
+  AT:
+    name: Austria
+    region: eurozone
+    yield_ric: AT10YT=RR
+    cds_ric: null
+    currency: EUR
+
+  # Eurozone Periphery
+  IT:
+    name: Italy
+    region: eurozone
+    yield_ric: IT10YT=RR
+    cds_ric: ITGV5YUSAC=R
+    currency: EUR
+
+  ES:
+    name: Spain
+    region: eurozone
+    yield_ric: ES10YT=RR
+    cds_ric: ESGV5YUSAC=R
+    currency: EUR
+
+  PT:
+    name: Portugal
+    region: eurozone
+    yield_ric: PT10YT=RR
+    cds_ric: null
+    currency: EUR
+
+  GR:
+    name: Greece
+    region: eurozone
+    yield_ric: GR10YT=RR
+    cds_ric: null
+    currency: EUR
+
+  IE:
+    name: Ireland
+    region: eurozone
+    yield_ric: IE10YT=RR
+    cds_ric: null
+    currency: EUR
+
+  # Europe Non-Euro
+  GB:
+    name: United Kingdom
+    region: europe
+    yield_ric: GB10YT=RR
+    cds_ric: GBGV5YUSAC=R
+    currency: GBP
+
+  CH:
+    name: Switzerland
+    region: europe
+    yield_ric: CH10YT=RR
+    cds_ric: null
+    currency: CHF
+
+  SE:
+    name: Sweden
+    region: europe
+    yield_ric: SE10YT=RR
+    cds_ric: null
+    currency: SEK
+
+  # North America
+  US:
+    name: United States
+    region: north_america
+    yield_ric: US10YT=RR
+    cds_ric: null
+    currency: USD
+    global_benchmark: true
+
+  CA:
+    name: Canada
+    region: north_america
+    yield_ric: CA10YT=RR
+    cds_ric: null
+    currency: CAD
+
+  # Asia-Pacific
+  JP:
+    name: Japan
+    region: asia_pacific
+    yield_ric: JP10YT=RR
+    cds_ric: null
+    currency: JPY
+
+  AU:
+    name: Australia
+    region: asia_pacific
+    yield_ric: AU10YT=RR
+    cds_ric: null
+    currency: AUD
+
+# Regional groupings for spread calculation
+regions:
+  eurozone:
+    name: Eurozone
+    benchmark_country: DE
+  europe:
+    name: Europe (Non-Euro)
+    benchmark_country: DE
+  north_america:
+    name: North America
+    benchmark_country: US
+  asia_pacific:
+    name: Asia-Pacific
+    benchmark_country: US
