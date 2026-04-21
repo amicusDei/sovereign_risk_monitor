@@ -154,7 +154,7 @@ Signals are triggered by:
 
 ## License
 
-MIT License - see [LICENSE](LICENSE)
+MIT License - see (LICENSE)
 
 ## Disclaimer
 
